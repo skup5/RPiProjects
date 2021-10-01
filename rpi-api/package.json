@@ -1,0 +1,14 @@
+{
+  "name": "rpiapi",
+  "version": "1.0.0",
+  "description": "Simple Raspberry Pi API",
+  "main": "rpi-api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Roman Zelenik",
+  "license": "ISC",
+  "dependencies": {
+    "onoff": "^4.1.4"
+  }
+}
