@@ -1,13 +1,33 @@
-const http = require("http").createServer(handler); //require http server, and create server with function handler()
-const fs = require("fs"); //require filesystem module
-const io = require("socket.io")(http); //require socket.io module and pass the http object (server)
-
-const interval = 1000;
+// Server setup
 const PORT = 8080;
+const ADDRESS = '0.0.0.0';
+const CONTEXT_PATH = '/RPiProject/'
 
-http.listen(PORT, (data) => {
-    console.log("Server is listening on port " + PORT);
-});
+// Websocket
+const interval = 1000;
+
+// External dependencies
+const fs = require("fs"); //require filesystem module
+const express = require('express')
+const router = express.Router()
+const app = express()
+
+// Context-forwarding function
+router
+    .route("/")                 // Bind root (Equals to CONTEXT_PATH )
+    .all((req, res) => {        // Forward any request, no matter POST,GET etc...
+        console.log('Forwarding to handler');
+        handler(req, res);
+    });
+
+// Bind server
+let http = app
+    .use(CONTEXT_PATH, router)
+    .listen(PORT, ADDRESS, (data) => {
+        console.log(`Server is listening on ${ADDRESS}:${PORT}${CONTEXT_PATH}`);
+    });
+
+const io = require("socket.io")(http, { path: `${CONTEXT_PATH}` }); //require socket.io module and pass the http object (server)
 
 function handler(req, res) {
     //create server
