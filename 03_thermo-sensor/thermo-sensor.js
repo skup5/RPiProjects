@@ -1,14 +1,36 @@
-const http = require("http").createServer(handler); //require http server, and create server with function handler()
+// Server setup
+const PORT = 8080;
+const ADDRESS = "0.0.0.0";
+const CONTEXT_PATH = "/temperature/";
+
+// Sensor setup
+const interval = 3000; //enter the time between sensor queries here (in milliseconds)
+
+// Server dependecies
+const express = require("express");
+const router = express.Router();
+const app = express();
+
 const fs = require("fs"); //require filesystem module
-const io = require("socket.io")(http); //require socket.io module and pass the http object (server)
+////
 const ds18b20 = require("ds18b20");
 
-const interval = 3000; //enter the time between sensor queries here (in milliseconds)
-const PORT = 8080;
+// Context-forwarding function
+router
+  .route("/") // Bind root (Equals to CONTEXT_PATH )
+  .all((req, res) => {
+    // Forward any request, no matter POST,GET etc...
+    console.log("Forwarding to handler");
+    handler(req, res);
+  });
 
-http.listen(PORT, (data) => {
-  console.log("Server is listening on port " + PORT);
+// Bind server
+const http = app.use(CONTEXT_PATH, router).listen(PORT, ADDRESS, (data) => {
+  console.log(`Server is listening on ${ADDRESS}:${PORT}/${CONTEXT_PATH}`);
 });
+
+// Bind socket.io to server
+const io = require("socket.io")(http, { path: `${CONTEXT_PATH}` }); //require socket.io module and pass the http object (server)
 
 function handler(req, res) {
   //create server
