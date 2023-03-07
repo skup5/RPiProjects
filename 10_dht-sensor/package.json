@@ -1,0 +1,14 @@
+{
+  "name": "dhtsensor",
+  "version": "1.0.0",
+  "description": "DHT11 sample app",
+  "main": "dht-sensor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Roman Zelenik",
+  "license": "ISC",
+  "dependencies": {
+    "node-dht-sensor": "^0.4.3"
+  }
+}
